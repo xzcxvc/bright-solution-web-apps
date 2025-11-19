@@ -287,7 +287,7 @@ function App() {
                             >
                               <div className="flex flex-col">
                                 <h2 className="text-3xl font-bold text-red-950">
-                                  {pillar?.title}aaazzz
+                                  {pillar?.title}
                                 </h2>
                                 <p className="text-gray-500">
                                   {pillar?.description}
