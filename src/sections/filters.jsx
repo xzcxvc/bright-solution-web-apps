@@ -15,6 +15,10 @@ export default function Filters({
     levels: "",
   });
 
+  // ✅ ADD THESE TWO STATES (TOP PART)
+  const [typeOptions, setTypeOptions] = useState([]);
+  const [levelOptions, setLevelOptions] = useState([]);
+
   useEffect(() => {
     console.clear();
   }, [filterForm]);
@@ -27,6 +31,10 @@ export default function Filters({
       types: "",
       levels: "",
     });
+
+    // Reset dropdowns
+    setTypeOptions([]);
+    setLevelOptions([]);
   };
 
   const pillarOptions = pillars.map((pillar) => ({
@@ -37,6 +45,8 @@ export default function Filters({
   return (
     <div className="flex items-center justify-center bg-gray-100 w-full">
       <div className="lg:w-9/12 w-full px-6 flex py-12 mt-6 gap-x-3 gap-y-10 lg:flex-row flex-col">
+
+        {/* SEARCH */}
         <Input
           name="search"
           type="text"
@@ -49,6 +59,8 @@ export default function Filters({
           }}
           onInputClear={handleResetFilters}
         />
+
+        {/* PILLARS DROPDOWN */}
         <Input
           name="pillars"
           type="combobox"
@@ -57,34 +69,78 @@ export default function Filters({
           options={pillarOptions || []}
           value={filterForm.pillars || ""}
           onOptionSelect={(option) => {
-            onComboboxSelect(option.name);
+
+            // find selected pillar in constants
+            const selectedPillar = pillars.find(
+              (p) => p.title === option.name
+            );
+
+            // load TYPES under this pillar
+            setTypeOptions(
+              selectedPillar?.subcontents?.map((sub) => ({
+                id: sub.id,
+                name: sub.title,
+              })) || []
+            );
+
+            // reset level options
+            setLevelOptions([]);
+
             setFilterForm((prev) => ({
               ...prev,
-              pillars: option.name, // set the selected option name or id
+              pillars: option.name,
+              types: "",
+              levels: "",
             }));
           }}
           onInputClear={handleResetFilters}
         />
+
+        {/* TYPES DROPDOWN */}
         <Input
           name="types"
           type="combobox"
           label="Types"
-          options={[]}
+          options={typeOptions}  // <- UPDATED
           placeholder={"All types"}
           value={filterForm.types || ""}
-          onOptionSelect={(option) =>
+          onOptionSelect={(option) => {
+
+            const selectedPillar = pillars.find(
+              (p) => p.title === filterForm.pillars
+            );
+
+            const selectedType = selectedPillar?.subcontents?.find(
+              (t) => t.title === option.name
+            );
+
+            // if type contains LEVEL items
+            if (selectedType?.items?.length > 0) {
+              setLevelOptions(
+                selectedType.items.map((lvl) => ({
+                  id: lvl.id,
+                  name: lvl.title,
+                }))
+              );
+            } else {
+              setLevelOptions([]);
+            }
+
             setFilterForm((prev) => ({
               ...prev,
               types: option.name,
-            }))
-          }
+              levels: "",
+            }));
+          }}
           onInputClear={handleResetFilters}
         />
+
+        {/* LEVELS DROPDOWN */}
         <Input
           name="levels"
           type="combobox"
           label="Levels"
-          options={[]}
+          options={levelOptions}   // <- UPDATED
           placeholder={"All levels"}
           value={filterForm.levels || ""}
           onOptionSelect={(option) =>
@@ -95,6 +151,7 @@ export default function Filters({
           }
           onInputClear={handleResetFilters}
         />
+
         <Button
           className="h-11 text-white"
           onClick={() => {
@@ -104,6 +161,7 @@ export default function Filters({
         >
           Reset
         </Button>
+
       </div>
     </div>
   );
