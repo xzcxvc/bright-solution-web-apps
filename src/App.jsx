@@ -213,7 +213,7 @@ function App() {
                                         onClick={() => setOpenModal(true)}
                                         color="crimson"
                                       >
-                                        Start with AI Readiness
+                                        Take the assessment
                                       </Button>
                                     </div>
                                   )}
