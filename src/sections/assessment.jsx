@@ -35,28 +35,35 @@ export default function Assessment({ setOpenModal }) {
 
     let innovation = "";
     let ai = "";
+    let fileUrl = "";
 
     if (avg >= 1 && avg < 2) {
       innovation = "Level 1: Basic Digital";
       ai = "Exploring";
+      fileUrl = "https://drive.google.com/file/d/1SY29fuOoML7tpy07oqWEeeJR6Zgsaoyp/view"
     } else if (avg >= 2 && avg < 3) {
       innovation = "Level 2: Connected";
       ai = "Planning";
+      fileUrl= "https://drive.google.com/file/d/1ltnaVQHgUNAHy_IRrqwUXQ7Uw7B-puLZ/view"
     } else if (avg >= 3 && avg < 4) {
       innovation = "Level 3: Integrated";
       ai = "Implementing";
+      fileUrl= "https://drive.google.com/file/d/12lHO9yoeuK3bg8oYiT7P2ua4ubbQOECH/view"
     } else if (avg >= 4 && avg < 5) {
       innovation = "Level 4: Intelligence Driven";
       ai = "Scaling";
+      fileUrl= "https://drive.google.com/file/d/1bp9tuPVKmeNOEa6-4WzUgLwOHsPt3VMP/view"
     } else if (avg === 5) {
       innovation = "Level 5: Transformed";
       ai = "Embedded";
+      fileUrl= "https://drive.google.com/file/d/1f5hnQgK-ltR8L2TUG7Dg306EBvHUxPtS/view"
     }
 
     setResult({
       average: avg.toFixed(1),
       innovation,
       ai,
+      fileUrl
     });
   };
 
@@ -152,6 +159,15 @@ export default function Assessment({ setOpenModal }) {
                 <p className="mt-2 flex flex-col">
                   <span className="font-bold">AI Readiness</span>
                   <span> {result.ai}</span>
+                   <a
+                                    href={result.fileUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-semibold text-red-700 hover:underline mt-3"
+                                  >
+                                  Download file
+                                  </a>
+                 
                 </p>
               </div>
 
